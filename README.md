@@ -16,8 +16,22 @@ This repository provides
 EXPLAIN THE PERFORMANCE DATA, how is it organised
 
 # Scripts
+There is one python script in the scripts folder, named tables_and_figures.py. This script can be used to reproduce all result related figures and tables as seen in the paper and appendix.
 
-EXPLAIN WHAT THE SCRIPTS DO
+
+## INPUT
+The input for this script are all the csv files found in performance data. One file of the CPU experiments, seperated on mnist and cifar, consists of all results for one network category, so for all relevant verifiers, all researched epsilons, all networks in the category and all considered images, the data file contains amongst others the total running-time and whether the problem instance was sat/unsat or for some reason not solved. 
+
+One file for the GPU experiments contains the same information as the CPU files, except that we only have results for one epsilon value. 
+
+## OUTPUT.
+Firstly, analyses results (in the contribution_results folder) consisting of standalone performance per verifier,absolute marginal contribution, relative marginal contribution, shapley value, average runtime over all instances that could be solved by atleast one verifier and average runtime over all instances that could be solved by all verifiers. The contribution results are seperated by cpu/gpu methods and network categorie. 
+
+Secondly, CDF plots, which can be found in figures/cdf. For each network category and gpu/cpu group a CDF plot is created, as long as there are more than two verifiers in the subcategory. 
+
+Thirdly, scatter plots which can be found in figures/scatter_plots. For cpu/ gpu seperated for each combination of verifiers in each network category a scatterplot is created. The data-points are the total time in cpu/gpu seconds for each tested instance. 
+
+All output is seperated by category, cpu/gpu and mnist/cifar.
 
 # Software 
 
