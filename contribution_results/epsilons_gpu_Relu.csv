@@ -1,0 +1,4 @@
+,mnist standalone 0.012,mnist absolute marginal contribution 0.012,mnist relative marginal contribution 0.012,mnist shapley values 0.012,mnist number solved0.012,mnist Average runtime 0.012,mnist All runtime 0.012,cifar standalone 0.012,cifar absolute marginal contribution 0.012,cifar relative marginal contribution 0.012,cifar shapley values 0.012,cifar number solved0.012,cifar Average runtime 0.012,cifar All runtime 0.012
+bab,1388,367,0.9152119700748129,938.6666666666666,1388,107.21711125705815,,1839,347,0.8589108910891089,1150.8333333333333,1839,200.78688743044052,
+eran,700,0,0.0,350.0,700,1828.722447257384,,1549,57,0.14108910891089108,812.5,1549,711.2634657172997,
+abcrown,355,34,0.08478802992518704,200.16666666666666,355,2750.4888135920764,,0,0,0.0,0.0,0,3600.0,

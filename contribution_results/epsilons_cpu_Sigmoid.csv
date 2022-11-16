@@ -1,0 +1,3 @@
+,mnist standalone 0.012,mnist absolute marginal contribution 0.012,mnist relative marginal contribution 0.012,mnist shapley values 0.012,mnist number solved0.012,mnist Average runtime 0.012,mnist All runtime 0.012
+marabou,0,0,0.0,0.0,0,3600.0,
+verinet,581,581,1.0,581.0,581,54.92198020654045,

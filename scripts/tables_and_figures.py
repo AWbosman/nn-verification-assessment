@@ -100,8 +100,13 @@ def get_standalone(data, coalition):
         # print("Standalone " , i , " is: " , temp['score'].sum())
     return res
 
-def get_num_solvable(instances):
-    print("the number of solvable instances is: " + len(instances))
+def get_num_solvable_any(data, coalition):
+    best = copy.copy(data)
+    best = best[best.TotalTime <3600]
+    instances = list(dict.fromkeys((best['Image'].astype(str) +" " + best['Network'].astype(str) + " " +best['Epsilon'].astype(str) ).tolist()))
+
+    print("the number of solvable instances is (any): " , len(instances))
+
 
 def get_average_runtime(coalition, data):
     '''
@@ -329,14 +334,15 @@ def scatter_with_hue(coalition, data, name, names,gpu, hue_name):
             data = data.sort_values(by=['instance'], ascending= False)
             if (len(data[data.Verifier ==coalition[i]]['TotalTime'].tolist())== len(data[data.Verifier ==coalition[j]]['TotalTime'].tolist())):
  
-                temp = pd.DataFrame(data = {coalition[i] :data[data.Verifier ==coalition[i]]['TotalTime'].tolist(), coalition[j]: data[data.Verifier ==coalition[j]]['TotalTime'].tolist(), hue_name:data[data.Verifier ==coalition[i]]['TotalTime'].tolist()} ) 
+                temp = pd.DataFrame(data = {coalition[i] :data[data.Verifier ==coalition[i]]['TotalTime'].tolist(), coalition[j]: data[data.Verifier ==coalition[j]]['TotalTime'].tolist(), hue_name:data[data.Verifier ==coalition[i]][hue_name].tolist()} ) 
                 sns.set(font_scale=2)
                 sns.set_style({'font.family':'serif', 'font.serif':'Times New Roman'})
                 # sns.set_style("whitegrid")
                 plt.figure(figsize=(12,12))
                 ax = sns.scatterplot(data = temp, x = coalition[i] ,y= coalition[j] , palette="deep", hue = hue_name)
                 plt.plot([10e4, 0], [10e4, 0], linewidth=1)
-                ax.legend(bbox_to_anchor=(1, 0.75))
+                # ax.legend(bbox_to_anchor=(1, 0.75))
+                plt.legend(loc='upper left')
                 ax.set(xscale="log", yscale="log")
                 ax.set(xlim=(10e-4, 10e4))
                 ax.set(ylim=(10e-4, 10e4))
@@ -367,7 +373,7 @@ def get_names_and_files(benchmark, categorie):
         if(benchmark == "mnist"):
             if("gpu" in categorie):
                 names = ["BaDNB", "GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_MNIST_MAXPOOL_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_mnist_Relu+Maxpool.csv')
                 return names, file
             else:
                 names = [ "Marabou"]
@@ -376,7 +382,7 @@ def get_names_and_files(benchmark, categorie):
         elif(benchmark == "cifar"):
             if("gpu" in categorie):
                 names = ["BaDNB", "GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_CIFAR_MAXPOOL_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_cifar_Relu+Maxpool.csv')
                 return names, file
             else:
                 names = ["Marabou"]
@@ -386,7 +392,7 @@ def get_names_and_files(benchmark, categorie):
         if(benchmark == "mnist"):
             if("gpu" in categorie):
                 names = [ "GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_MNIST_TANH_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_mnist_Tanh.csv')
                 return names, file
             else:
                 names = ["Verinet"]
@@ -395,7 +401,7 @@ def get_names_and_files(benchmark, categorie):
         elif(benchmark == "cifar"):
             if("gpu" in categorie):
                 names = [ "GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_CIFAR_TANH_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_cifar_Tanh.csv')
                 return names, file
             else:
                 names = ["Verinet"]
@@ -405,7 +411,7 @@ def get_names_and_files(benchmark, categorie):
         if(benchmark == "mnist"):
             if("gpu" in categorie):
                 names = [ "GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_MNIST_SIGMOID_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_mnist_Sigmoid.csv')
                 return names, file
             else:
                 names = ["Marabou",  "Verinet"]
@@ -414,7 +420,7 @@ def get_names_and_files(benchmark, categorie):
         elif(benchmark == "cifar"):
             if("gpu" in categorie):
                 names = ["GPUPoly"]
-                file = pd.read_csv('performance_data/gpu/GPU_CIFAR_SIGMOID_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_cifar_Sigmoid.csv')
                 return names, file
             else:
                 names = [ "Marabou",  "Verinet"]
@@ -424,7 +430,7 @@ def get_names_and_files(benchmark, categorie):
         if(benchmark == "mnist"):
             if("gpu" in categorie):
                 names = ["BaDNB", "GPUPoly", "beta-CROWN"]
-                file = pd.read_csv('performance_data/gpu/GPU_MNIST_RELU_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_mnist_Relu.csv')
                 return names, file
             else:
                 names = ["BaBSB", "Marabou", "Neurify","nnenum",  "Verinet"]
@@ -433,7 +439,7 @@ def get_names_and_files(benchmark, categorie):
         elif(benchmark == "cifar"):
             if("gpu" in categorie):
                 names = ["BaDNB", "GPUPoly", "beta-CROWN"]
-                file = pd.read_csv('performance_data/gpu/GPU_CIFAR_RELU_0002.csv')
+                file = pd.read_csv('performance_data/gpu/cleaned_gpu_cifar_Relu.csv')
                 return names, file
             else:
                 names = ["BaBSB", "Marabou", "Neurify","nnenum",  "Verinet"]
@@ -441,7 +447,7 @@ def get_names_and_files(benchmark, categorie):
                 return names, file
 
 
-def get_csv_for_all(benchmarks, categories): 
+def get_csv_for_all(benchmarks, categories, epsilons): 
     '''
     This function created csv for each of the indicates categories and benchmarks, 
     consisting of marginal contribution, shapley value, standalone, average runtime and average runtime over the instances solvable by all in the coalition. 
@@ -455,14 +461,14 @@ def get_csv_for_all(benchmarks, categories):
     OUTPUT:
 
     ''' 
-    
-
     for i in categories:
         coalition = categories[i]
         df = pd.DataFrame(columns = coalition)
         for j in benchmarks:
             print("this is categorie ", i, " and benchmark ", j)
             names, data = get_names_and_files(j, i)
+            data = data[data["Epsilon"].isin(epsilons)]
+            get_num_solvable_any( data, coalition )
             if(len(data) >0):
                 x =  get_standalone(data, coalition)
                 temp = pd.DataFrame(x, index=[ j + " standalone"])
@@ -500,9 +506,81 @@ def get_csv_for_all(benchmarks, categories):
                     gpu = True
                 scatter_per_method(coalition, data, i + "_" + j, names, gpu)
                 cdf_per_method(coalition, data, i + "_" + j+ ".pdf", names, gpu)
+                scatter_with_hue(coalition, data, "colored_scatter_"  + i + "_" + j + "_"  , names, gpu, "Epsilon")
+
 
         df =df.T
         df.to_csv('contribution_results/'+ i + ".csv")
+ 
+
+
+
+def get_csv_for_epsilons(benchmarks, categories, epsilons): 
+    '''
+    This function created csv for each of the indicates categories and benchmarks, 
+    consisting of marginal contribution, shapley value, standalone, average runtime and average runtime over the instances solvable by all in the coalition. 
+    It also calls the functions for the scatterplot and CDF plots. 
+
+    INPUT:
+    benchmarks: list of strings of the benchmarks that need to be tested. 
+    categories: dictionary which maps the categorie name to a list of verifier names as indicated in the data. 
+
+
+    OUTPUT:
+
+    ''' 
+    for i in categories:
+        coalition = categories[i]
+        df = pd.DataFrame(columns = coalition)
+        for j in benchmarks:
+            for k in epsilons:
+                print("this is categorie ", i, " and benchmark ", j)
+                names, data = get_names_and_files(j, i)
+                data = data[data.Epsilon == k]
+        
+                get_num_solvable_any(data, coalition )
+                if(len(data) >0):
+                    x =  get_standalone(data, coalition)
+                    temp = pd.DataFrame(x, index=[ j + " standalone " +str(k)])
+                    df = pd.concat([df, temp])
+                
+                    score = get_total_coalition_score(data)
+                    x = get_absolute_marginal_contribution(data, coalition, score)
+                    temp = pd.DataFrame(x, index=[ j + " absolute marginal contribution " +str(k)])
+                    df = pd.concat([df, temp])
+
+                    score = get_total_coalition_score(data)
+                    x = get_relative_marginal_contribution(data, coalition, score)
+                    temp = pd.DataFrame(x, index=[ j + " relative marginal contribution " + str(k)])
+                    df = pd.concat([df, temp])
+
+                    x = get_Shapley_values(coalition, data)
+                    temp = pd.DataFrame(x, index=[ j + " shapley values " + str(k)])
+                    df = pd.concat([df, temp])
+                    
+                    x = get_solved_method( coalition, data)
+                    temp = pd.DataFrame(x, index=[ j + " number solved" + str(k)])
+                    df = pd.concat([df, temp])
+
+                    x = get_average_runtime( coalition, data)
+                    temp = pd.DataFrame(x, index=[ j + " Average runtime "+str(k)])
+                    df = pd.concat([df, temp])
+                    
+                    x = get_all_runtime(coalition, data)
+                    temp = pd.DataFrame(x, index=[ j + " All runtime " +str(k)])
+                    df = pd.concat([df, temp])
+                    gpu = False
+                    if("gpu" in i ):
+                        gpu = True
+                    scatter_per_method(coalition, data, "eps_" +i + "_" + j , names, gpu)
+                    cdf_per_method(coalition, data, "eps_" +i + "_" + j+ "pdf", names, gpu)
+
+                
+                    
+        df =df.T
+        df.to_csv('contribution_results/epsilons_'+ i + ".csv")
+ 
+
 
 
 
@@ -520,12 +598,12 @@ categories ={ "cpu_Relu"           :["babsb", "marabou", "neurify","nnenum",  "v
               "gpu_Tanh"           :["eran"]}
 
 
-
+epsilons = [0.004, 0.005, 0.008, 0.01, 0.012, 0.02, 0.025, 0.03, 0.04]
 '''When running this, the results for all the benchmarks and categories will be created. 
    #TODO: Make sure the directory names as indicated in get_names_and_files match yours.
     '''
-get_csv_for_all(benchmarks, categories)
-
+get_csv_for_all(benchmarks, categories,epsilons)
+get_csv_for_epsilons(benchmarks, categories, [0.012])
 
 '''If you'd like partial results see code here as example'''
 
